@@ -45,6 +45,19 @@ class Line :
         # angle = self.angle + OtherLine.angle ( + check depending on which angle it is )
         angle = np.arccos(np.dot(self.Direction, OtherLine.Direction))  
         if angle > ( np.pi / 2) : 
-            return angle - np.pi / 2 #On cherche l'angle entre la perpendiculaire du mur et notre rayon, cf loi de Snell p135
+            return np.pi - angle 
+        else : 
+            return angle    
+
+    def incidenceAngle(self, OtherLine : Line) : 
+        '''
+        Calculate the incidence angle on a wall
+        '''
+        # angle = self.angle + OtherLine.angle ( + check depending on which angle it is )
+        angle = np.arccos(np.dot(self.Direction, OtherLine.Direction))  
+        if angle > ( np.pi / 2) : 
+            return angle - np.pi / 2     #On cherche l'angle entre la perpendiculaire du mur et notre rayon, cf loi de Snell p135
         else : 
             return np.pi / 2 - angle    
+
+    
