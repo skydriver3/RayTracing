@@ -7,7 +7,6 @@ SIGMA_AIR = 0 #conductivity
 FREQ = 5e9
 BETA = 2*np.pi*FREQ / c
 
-
 class wall (Line.Line): 
     def __init__(self, Width, epsilon, mu, sigma, StartVec, EndVec): 
         self._width = Width #notee l dans le sylla
