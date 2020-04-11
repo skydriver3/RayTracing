@@ -14,7 +14,7 @@ class Line :
     def Contains(self, Point) : 
         if(len(Point) > 2): 
             P = (Point - self.Vec2)  
-            lamda = [P[i] / self.Distance[i] for i in range(len(P))]
+            lamda = [P[i] / self.Distance[i] for i in range(len(P))] #Distance est une norme; quid [i], Direction plutot?
             for i in range(len(lamda) - 1) : 
                 if lamda[0] != lamda[i + 1] : 
                     return False
@@ -28,7 +28,7 @@ class Line :
                 return True
 
 
-
+    
     def Intersect(self, OtherLine : Line) : 
         x = ( self.Y0 - OtherLine.Y0 ) / ( OtherLine.slope - self.slope )
         y = self.Y0 + self.slope * x 
@@ -48,3 +48,5 @@ class Line :
             return np.pi - angle
         else : 
             return angle
+
+    

@@ -1,6 +1,7 @@
 import numpy as np  
 import Wall 
 import Ray
+from typing import Callable, Any, List
 
 def rotate_decorator(gain, wallAngle): 
     def rotated_gain(theta, phi) : 
@@ -9,7 +10,7 @@ def rotate_decorator(gain, wallAngle):
 
 
 class Antenna : 
-    def __init__(self, PosVec, EmittedPower, Gains : list[Callable[Any]], ImagedSource : Antenna = None, SymmetryWall : Wall.wall = None): 
+    def __init__(self, PosVec, EmittedPower, Gains : List[Callable[Any]], ImagedSource : Antenna = None, SymmetryWall : Wall.wall = None): 
         self._pos = PosVec 
         self._emittedPower = EmittedPower
         self.gains = Gains 
@@ -33,7 +34,7 @@ class Antenna :
         return Antenna(pos, None, None, self, symWall)
 
 
-    def Propagate(self, Rx_pos, Walls: list[Wall.wall], trajectory ): 
+    def Propagate(self, Rx_pos, Walls: List[Wall.wall], trajectory ): 
         
         ray = Ray.Ray(Rx_pos, self._pos, [])
         P = [] 

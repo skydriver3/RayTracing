@@ -1,9 +1,10 @@
 import Ray
 import Antenna 
 import Wall
+from typing import List
 
 class Space : 
-    def __init__(self, Walls : list[Wall.wall], Tx : list[Antenna.Antenna], Rx : list[Antenna.Antenna]) : 
+    def __init__(self, Walls : List[Wall.wall], Tx : List[Antenna.Antenna], Rx : List[Antenna.Antenna]) : 
         self.Walls = Walls 
         self.Tx = Tx 
         self.Rx = Rx 
@@ -15,7 +16,7 @@ class Space :
         
         return Images
 
-    def CreateImagesFor_AllTx_AllWalls(self, Transmitters : list[Antenna.Antenna]) :
+    def CreateImagesFor_AllTx_AllWalls(self, Transmitters : List[Antenna.Antenna]) :
         Images = [] 
         for t in Transmitters : 
             Images.extend(self.CreateImageFor_AllWalls(t)) 
