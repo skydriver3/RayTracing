@@ -43,10 +43,10 @@ class Antenna :
             if IsIntersected: 
                 theta = ray.Angle(w)
                 if (w == self.Wall) : 
-                    ray.gains.append(w.ReflexionGain(theta)) 
+                    ray.gains.append(w.ReflectionCoeffWall(theta)) 
 
                 else : 
-                    ray.gains.append(w.TransmissionGain(theta))
+                    ray.gains.append(w.TransmissionCoeffWall(theta))
         
         trajectory.append(ray)
         if (self.Source != None ) : 
