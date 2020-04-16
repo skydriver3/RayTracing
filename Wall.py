@@ -27,7 +27,7 @@ class wall (Line.Line):
         return coeff
 
 
-    def ReflectionCoeffWall(self, wall, thetaI): 
+    def ReflectionCoeffWall(self, thetaI): 
         '''
         Returns the reflection coefficient of the wall for a given incident angle thetaI
         '''
@@ -42,7 +42,7 @@ class wall (Line.Line):
         return coeff 
 
 
-    def TransmissionCoeffWall(self, wall, thetaI) : 
+    def TransmissionCoeffWall(self, thetaI) : 
         '''
         Returns the transmission coefficient of the wall for a given incident angle thetaI
         '''        
