@@ -49,7 +49,7 @@ class Line :
         else : 
             return angle    
 
-    def incidenceAngle(self, OtherLine : Line) : 
+    def incidenceAngle(self, OtherLine ) : 
         '''
         Calculate the incidence angle on a wall
         '''

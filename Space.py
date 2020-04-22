@@ -1,6 +1,7 @@
 import Ray
 import Antenna 
 import Wall
+import pygame
 from typing import List
 
 class Space : 
@@ -8,6 +9,9 @@ class Space :
         self.Walls = Walls 
         self.Tx = Tx 
         self.Rx = Rx 
+        self.canvas = pygame.display.set_mode((300, 300))
+        self.canvas.fill((49,150,100))
+        pygame.display.flip()
     
     def CreateImageFor_AllWalls(self, transmitter : Antenna.Antenna) : 
         Images = [] 
@@ -33,4 +37,14 @@ class Space :
             transmitters = self.CreateImagesFor_AllTx_AllWalls(transmitters)
 
         return trajectories
+
+    def Draw(self, Trajectories : List[Ray.Ray]): 
+        
+        for r in Trajectories : 
+            r.draw()
+        pygame.display.flip()
+
+    
+
+    
 

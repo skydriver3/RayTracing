@@ -1,6 +1,7 @@
 import numpy as np  
 import Wall 
 import Ray
+import Line
 from typing import Callable, Any, List
 
 def rotate_decorator(gain, wallAngle): 
@@ -34,23 +35,30 @@ class Antenna :
         return Antenna(pos, None, None, self, symWall)
 
 
-    def Propagate(self, Rx_pos, Walls: List[Wall.wall], trajectory ): 
+    def Propagate(self, Rx_pos, Walls: List[Wall.wall], ray : Ray.Ray ): 
         
-        ray = Ray.Ray(Rx_pos, self._pos, [])
+        gains = [] 
+        line = Line.Line(Rx_pos, self._pos)
         P = [] 
+        IsReflexionWallHit = False
         for w in Walls :
-            IsIntersected, P = ray.Intersect(w) 
+            IsIntersected, P = line.Intersect(w) 
             if IsIntersected: 
-                theta = ray.Angle(w)
+                theta = line.Angle(w)
                 if (w == self.Wall) : 
-                    ray.gains.append(w.ReflectionCoeffWall(theta)) 
-
+                    gains.append(w.ReflectionCoeffWall(theta)) 
+                    IsReflexionWallHit = True
                 else : 
-                    ray.gains.append(w.TransmissionCoeffWall(theta))
+                    gains.append(w.TransmissionCoeffWall(theta))
         
-        trajectory.append(ray)
-        if (self.Source != None ) : 
-            trajectory = self.Source.Propagate(P, Walls, trajectory)
-        return trajectory
+        # le rayon emis doit passer par le mur de la reflection sinon le scenario n'est pas valide 
+        if(IsReflexionWallHit) : 
+            ray.add(Ray.Beam(Rx_pos, P, gains))
+            # S'il n'y pas de source ca signifie que le transmitter actuel est un transmitter original et donc pas image 
+            if (self.Source != None ) : 
+                ray = self.Source.Propagate(P, Walls, ray)
+            return ray
+        else : 
+            return None
 
 
