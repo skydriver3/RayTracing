@@ -8,7 +8,7 @@ from scipy.constants import c
 Gtx = 4*np.pi*0.13 
 Ptx = 0.1
 FREQ = 5e9
-BETA = 2*np.pi*(FREQ) / c
+BETA = 2*np.pi*(FREQ) / c #A changer, on veut GAMMAm
 H_EQ = -c / (FREQ * np.pi)
 R_A = 73.45612758
 
@@ -21,12 +21,16 @@ class Beam(Line.Line) : #On y rajouterait pas l'antenne en parametre pour avoir 
     def __add__(self, otherRay :  "Beam" ): 
         return Ray([self, otherRay])
 
-    def elecFieldDirect(self, Gtx, Ptx, BETA): #parameters are properties of the antenna, add antenna to the Ray parameters
+    def elecFieldDirect(self, Gtx, Ptx, BETA, Space): #parameters are properties of the antenna, add antenna to the Ray parameters
     #def elecFieldDirect(self, Antenna):
         """
         Returns the complex electric field for a direct path d
         """
-        d = self.Distance
+        #d = self.Distance
+        trajectories = Space.Predict(Reflexions) #Reflexions?
+        trajectory = trajectories[0]
+        ray = trajectory[0]
+        d = ray.Distance 
         elecFieldDirect = np.sqrt(60*(self*Gtx)*Ptx) * np.exp(-1j*BETA*d) / d #(8.77)
 
         return elecFieldDirect
@@ -43,17 +47,18 @@ class Beam(Line.Line) : #On y rajouterait pas l'antenne en parametre pour avoir 
         """
         Returns the average power of a direct ray joining Tx and Rx with (or not) transmission(s)
         """
-        coeff = 1
+        coeff = 1  
         for i in range(len(Walls)): #si pas de mur, on ne rentre juste pas dans le for
             thetaI = self.incidenceAngle(Walls[i])
             coeff *= Walls[i].TransmissionCoeffWall(thetaI)
+
 
         eField = coeff * self.elecFieldDirect(Gtx, Ptx, BETA)
         power = self.averagePower(eField)
 
         return power
 
-    def reflectionPower(self, Walls):
+    def reflectionPower(self, Space): #trajectories (from Space) that contains all the rays, so that we can pick the coefficients 
         """
         To do 
         """
@@ -83,4 +88,5 @@ class Ray :
     def __repr__(self):
         return "Im a ray, yay !!!"
             
+
 
