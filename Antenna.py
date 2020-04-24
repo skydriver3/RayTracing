@@ -11,14 +11,14 @@ def rotate_decorator(gain, wallAngle):
 
 
 class Antenna : 
-    def __init__(self, PosVec, EmittedPower, Gains : List[Callable[Any]], ImagedSource : Antenna = None, SymmetryWall : Wall.wall = None): 
+    def __init__(self, PosVec, EmittedPower, Gains, ImagedSource : "Antenna" = None, SymmetryWall : "Wall.wall" = None): 
         self._pos = PosVec 
         self._emittedPower = EmittedPower
         self.gains = Gains 
         self.Source = ImagedSource
         self.Wall = SymmetryWall
 
-    def CreateImage(self, symWall : Wall.wall) -> Antenna : 
+    def CreateImage(self, symWall : "Wall.wall") -> "Antenna" : 
         
         ################### Calcul position antenna ################################
         pos = []
@@ -35,30 +35,44 @@ class Antenna :
         return Antenna(pos, None, None, self, symWall)
 
 
-    def Propagate(self, Rx_pos, Walls: List[Wall.wall], ray : Ray.Ray ): 
+    def Propagate(self, Rx_pos, Walls: List["Wall.wall"], ray : "Ray.Ray"  = None ): 
         
+        print("Called Propagate : the propagation wall is " + repr(self.Wall))
+        print(f"the image position : {self._pos}")
         gains = [] 
         line = Line.Line(Rx_pos, self._pos)
-        P = [] 
+        P = self._pos
         IsReflexionWallHit = False
         for w in Walls :
-            IsIntersected, P = line.Intersect(w) 
+            # print("going through walls")
+            IsIntersected, intersectionPoint = line.Intersect(w) 
             if IsIntersected: 
+                print("Intersection")
                 theta = line.Angle(w)
                 if (w == self.Wall) : 
                     gains.append(w.ReflectionCoeffWall(theta)) 
                     IsReflexionWallHit = True
+                    P = intersectionPoint
+                    print("Hit the reflective wall !!!")
                 else : 
                     gains.append(w.TransmissionCoeffWall(theta))
         
+        if(ray != None ): 
+            # S'il n'y pas de source ca signifie que le transmitter actuel est un transmitter original et donc pas image 
+            ray.add(Ray.Beam(Rx_pos, P, gains))
+        else : 
+            ray = Ray.Ray([Ray.Beam(Rx_pos, P, gains)])
+        
         # le rayon emis doit passer par le mur de la reflection sinon le scenario n'est pas valide 
         if(IsReflexionWallHit) : 
-            ray.add(Ray.Beam(Rx_pos, P, gains))
-            # S'il n'y pas de source ca signifie que le transmitter actuel est un transmitter original et donc pas image 
-            if (self.Source != None ) : 
-                ray = self.Source.Propagate(P, Walls, ray)
+            ray = self.Source.Propagate(P, Walls, ray) 
+
             return ray
         else : 
-            return None
+            if (self.Source == None): # si c'est une source initial c'est normale qu'il n'ai pas reflection
+                return ray 
+            else :
+                print("No Reflexion hit !!") 
+                return None
 
 

@@ -1,7 +1,6 @@
 import Ray
 import Antenna 
 import Wall
-import pygame
 from typing import List
 
 class Space : 
@@ -16,7 +15,8 @@ class Space :
     def CreateImageFor_AllWalls(self, transmitter : Antenna.Antenna) : 
         Images = [] 
         for w in self.Walls : 
-            Images.append(transmitter.CreateImage(w))
+            if (transmitter.Wall != w ) : 
+                Images.append(transmitter.CreateImage(w))
         
         return Images
 
@@ -30,19 +30,19 @@ class Space :
     def Predict(self, Reflexions) : 
         transmitters = self.Tx
         trajectories = [] 
-        for r in Reflexions : 
+        for _ in range(Reflexions) : 
+            print("\n\nlevel of relfection : " + str(_) + "\n################\n")
             for t in transmitters : 
                 for r in self.Rx : 
-                    trajectories.append(t.Propagate(r._pos, self.Walls, []))
+                    ray = t.Propagate(r._pos, self.Walls)
+                    if ray != None : 
+                        trajectories.append(ray) 
             transmitters = self.CreateImagesFor_AllTx_AllWalls(transmitters)
 
         return trajectories
 
     def Draw(self, Trajectories : List[Ray.Ray]): 
-        
-        for r in Trajectories : 
-            r.draw()
-        pygame.display.flip()
+        pass
 
     
 

@@ -6,39 +6,73 @@ class Line :
         self.Vec2 = EndVec 
         self.Direction = self.Vec1 - self.Vec2
         self.Distance = np.linalg.norm(self.Direction)
-        self.Direction /= self.Distance
+        self.Direction = self.Direction / self.Distance
         self.angle = np.arccos(self.Direction[0])
-        self.slope = np.sqrt( 1 - (self.Direction[0] ** 2)) / self.Direction[0]
-        self.Y0 = self.Vec2[1] + self.Direction[1] * (- self.Vec2[0] / self.Direction[0])
+        # self.slope = np.sqrt( 1 - (self.Direction[0] ** 2)) / self.Direction[0] # tan = sin / cos 
+        # self.Y0 = self.Vec2[1] + self.Direction[1] * (- self.Vec2[0] / self.Direction[0])
     
     def Contains(self, Point) : 
-        if(len(Point) > 2): 
-            P = (Point - self.Vec2)  
-            lamda = [P[i] / self.Distance[i] for i in range(len(P))] #Distance est une norme; quid [i], Direction plutot?
-            for i in range(len(lamda) - 1) : 
-                if lamda[0] != lamda[i + 1] : 
-                    return False
-            if lamda[0] < 0 or lamda[0] > self.Distance : 
-                return False 
+        # if(len(Point) > 2): 
+        # P = (Point - self.Vec2)  
+        # lamda = [P[i] / self.Direction[i] for i in range(len(P))] #Distance est une norme; quid [i], Direction plutot?
+        # for i in range(len(lamda) - 1) : 
+        #     if lamda[0] != lamda[i + 1] : 
+        #         return False
+        # if lamda[0] < 0 or lamda[0] > self.Distance : 
+        #     return False 
 
+        # else : 
+        #     return True 
+
+        IsFirstLamda = True 
+        lamda = 0 
+        P = (Point - self.Vec2) 
+        for i in range(len(P)) : 
+            if self.Direction[i] == 0: 
+                if(P[i] != 0): 
+                    return False  
             else : 
-                return True 
-        else : 
-            if ( Point[1] == self.Y0 + self.slope * Point[0] and np.linalg.norm(Point - self.Vec2) <= self.Distance) : 
-                return True
+                if IsFirstLamda : 
+                    lamda = round(P[i] / self.Direction[i], 6) 
+                    IsFirstLamda = False
+                    print("the first lambda : " + str(lamda))
+                else : 
+                    tmp = round(P[i] / self.Direction[i], 6) 
+                    print("other lambda : " + str(tmp))
+                    if lamda != tmp : 
+                        return False 
+        
+        return True 
+
+                
+        # else : 
+        #     if ( (Point[1] == self.Y0 + self.slope * Point[0]) and (np.linalg.norm(Point - self.Vec2) <= self.Distance)) : 
+        #         return True
+        #     else : 
+        #         return False
 
 
     
-    def Intersect(self, OtherLine : Line) : 
-        x = ( self.Y0 - OtherLine.Y0 ) / ( OtherLine.slope - self.slope )
-        y = self.Y0 + self.slope * x 
-        P = [x, y]
-        if self.Contains(P) : 
-            return (True, [x, y])  
+    def Intersect(self, OtherLine : "Line") : 
+        # x = ( self.Y0 - OtherLine.Y0 ) / ( OtherLine.slope - self.slope )
+        # y = self.Y0 + self.slope * x 
+        P= []
+ 
+        num = (OtherLine.Direction[1] * (self.Vec1[0] - OtherLine.Vec1[0])) - (OtherLine.Direction[0] * (self.Vec1[1] - OtherLine.Vec1[1]))
+        denom = self.Direction[1] * OtherLine.Direction[0] - self.Direction[0] * OtherLine.Direction[1]
+        if(denom != 0 ):
+            lamda = num / denom 
+            P = self.Vec1 + self.Direction * lamda
         else : 
-            return (False, [0, 0]) 
+            return (False, None)
 
-    def Angle(self, OtherLine : Line) : 
+        print(f"Printing intersection point : {P} ")
+        if self.Contains(P) and OtherLine.Contains(P) : 
+            return (True, P)  
+        else : 
+            return (False, None) 
+
+    def Angle(self, OtherLine) : 
         '''
         Can be optimized for 2D cases ( no use of arccos )
         '''

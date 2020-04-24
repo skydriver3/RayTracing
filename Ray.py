@@ -2,7 +2,7 @@ import numpy as np
 import Line
 from typing import List
 from scipy.constants import c
-import pygame
+
 
 #everything below to remove and place it in the antenna
 Gtx = 4*np.pi*0.13 
@@ -18,7 +18,7 @@ class Beam(Line.Line) : #On y rajouterait pas l'antenne en parametre pour avoir 
         self.gains = Gains
 
 
-    def __add__(self, otherRay : Beam ): 
+    def __add__(self, otherRay :  "Beam" ): 
         return Ray([self, otherRay])
 
     def elecFieldDirect(self, Gtx, Ptx, BETA): #parameters are properties of the antenna, add antenna to the Ray parameters
@@ -60,7 +60,7 @@ class Beam(Line.Line) : #On y rajouterait pas l'antenne en parametre pour avoir 
         return 0
 
 class Ray : 
-    def __init__(self, beams : List[Beam]) : 
+    def __init__(self, beams : List["Beam"]) : 
         '''
         beams : a list containing all the rays making up the whole trajectory ( rays for each reflexion )
         ''' 
@@ -71,7 +71,7 @@ class Ray :
             self.add(b) 
 
 
-    def add(self, beam : Beam): 
+    def add(self, beam : "Beam"): 
         self.DistanceTraveled += beam.Distance
         self.Coordinates.append([beam.Vec1, beam.Vec2])
         self.Coefficients.extend(beam.gains)
@@ -79,5 +79,8 @@ class Ray :
     def draw(self, canvas) : 
         for coor in self.Coordinates : 
             pygame.draw.line(canvas, (255, 0, 0), coor[0], coor[1])
+
+    def __repr__(self):
+        return "Im a ray, yay !!!"
             
 
