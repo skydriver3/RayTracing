@@ -11,6 +11,9 @@ class Line :
         # self.slope = np.sqrt( 1 - (self.Direction[0] ** 2)) / self.Direction[0] # tan = sin / cos 
         # self.Y0 = self.Vec2[1] + self.Direction[1] * (- self.Vec2[0] / self.Direction[0])
     
+    def MidPoint(self) : 
+        return self.Vec2 + self.Direction * (self.Distance / 2) 
+
     def Contains(self, Point) : 
         # if(len(Point) > 2): 
         # P = (Point - self.Vec2)  
@@ -26,7 +29,7 @@ class Line :
 
         IsFirstLamda = True 
         lamda = 0 
-        P = (Point - self.Vec2) 
+        P = (Point - self.MidPoint()) 
         for i in range(len(P)) : 
             if self.Direction[i] == 0: 
                 if(P[i] != 0): 
@@ -35,7 +38,8 @@ class Line :
                 if IsFirstLamda : 
                     lamda = round(P[i] / self.Direction[i], 6) 
                     IsFirstLamda = False
-                    if np.abs(lamda) > self.Distance : 
+                    
+                    if np.abs(lamda) > self.Distance / 2 : 
                         return False
                 else : 
                     tmp = round(P[i] / self.Direction[i], 6) 

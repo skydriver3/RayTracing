@@ -12,6 +12,8 @@ import Space
 import Ray
 import numpy as np
 import map
+import Line
+
 if __name__ == "__main__" : 
     
     Walls = [  
@@ -48,3 +50,5 @@ if __name__ == "__main__" :
     
     
     map.drawing(listeRayon, Tx, Rx, listWall)
+
+
