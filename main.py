@@ -1,21 +1,49 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Apr 22 11:14:31 2020
+
+@author: leandro
+"""
+
+
 import Antenna 
 import Wall 
 import Space 
-import Ray 
+import Ray
 import numpy as np
-import Line
-
+import map
 if __name__ == "__main__" : 
+    
     Walls = [  
-        Wall.wall(20, 1, 1, 1, np.array([100, 0]), np.array([100, 300])), 
-        Wall.wall(20, 1, 1, 1, np.array([250, 0]), np.array([250, 300]))]
-        #Wall.wall(20, 1, 1, 1, np.array([300, 200]), np.array([250, 300]))] 
-    Tx = [Antenna.Antenna(np.array([150, 100]), 100, [])] 
-    Rx = [Antenna.Antenna(np.array([150, 200]), 0, [])] 
+        ##Wall.wall(20, 1, 1, 1, np.array([200, 0]), np.array([0, 0])), 
+        Wall.wall(20, 1, 1, 1, np.array([0, 0]), np.array([0, 100])),
+        Wall.wall(20, 1, 1, 1, np.array([200, 0]), np.array([200, 100]))]
+        ##Wall.wall(20, 1, 1, 1, np.array([200, 100]), np.array([0, 100]))]
+        ##Wall.wall(20, 1, 1, 1, np.array([50, 85]), np.array([15, 50]))]
+        
+    Tx = [Antenna.Antenna(np.array([30, 30]), 100, [])] 
+    Rx = [Antenna.Antenna(np.array([133, 80]), 0, [])] 
 
     env = Space.Space(Walls, Tx, Rx)
-    rays = env.Predict(4)
+    rays = env.Predict(2)
     env.Draw(rays) 
-
-
-
+    Rayon = []
+    listeRayon = []
+    for ray in (rays) : 
+         
+         Rayon = ray.Coordinates
+         listeRayon+=(Rayon)
+         Rayon = []
+    wall = []
+    listWall = []
+    for mur in (Walls):
+        wall = [mur.Vec1, mur.Vec2]
+        listWall += [wall]
+        wall = []
+         
+    map = map.map()
+    Tx = [Tx[0]._pos]
+    Rx = [Rx[0]._pos]
+    
+    
+    map.drawing(listeRayon, Tx, Rx, listWall)
