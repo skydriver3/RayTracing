@@ -2,6 +2,7 @@ import numpy as np
 import Line
 from typing import List
 from scipy.constants import c
+import pygame
 
 
 #everything below to remove and place it in the antenna
@@ -77,9 +78,10 @@ class Ray :
         self.Coefficients.extend(beam.gains)
     
     def draw(self, canvas) : 
-        for coor in self.Coordinates : 
-            pygame.draw.line(canvas, (255, 0, 0), coor[0], coor[1])
-
+        for linecoor in self.Coordinates : 
+            pygame.draw.line(canvas, (255, 0, 0), linecoor[0], linecoor[1])
+        pygame.display.flip()
+        
     def __repr__(self):
         return "Im a ray, yay !!!"
             

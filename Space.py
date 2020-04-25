@@ -2,13 +2,17 @@ import Ray
 import Antenna 
 import Wall
 from typing import List
+import pickle 
+import pygame 
+import main 
 
 class Space : 
     def __init__(self, Walls : List[Wall.wall], Tx : List[Antenna.Antenna], Rx : List[Antenna.Antenna]) : 
         self.Walls = Walls 
         self.Tx = Tx 
         self.Rx = Rx 
-        self.canvas = pygame.display.set_mode((300, 300))
+        pygame.init()
+        self.canvas = pygame.display.set_mode((1000, 1000))
         self.canvas.fill((49,150,100))
         pygame.display.flip()
     
@@ -33,16 +37,31 @@ class Space :
         for _ in range(Reflexions) : 
             print("\n\nlevel of relfection : " + str(_) + "\n################\n")
             for t in transmitters : 
+                myfont = pygame.font.SysFont("Comic Sans MS", 7)
+                label = myfont.render(f"({int(t._pos[0])}, {int(t._pos[1])} ) ", 1, (0, 0, 255))
+                self.canvas.blit(label, (int(t._pos[0]), int(t._pos[1])))
+                pygame.draw.circle(self.canvas, (0, 0, 255), (int(t._pos[0]), int(t._pos[1])), 2)
                 for r in self.Rx : 
                     ray = t.Propagate(r._pos, self.Walls)
                     if ray != None : 
-                        trajectories.append(ray) 
+                        print(f"\n adding a ray #############\n")
+                        r.rays.append(ray) 
+                        ray.draw(self.canvas)  
+                        main.wait()                      
             transmitters = self.CreateImagesFor_AllTx_AllWalls(transmitters)
 
-        return trajectories
 
-    def Draw(self, Trajectories : List[Ray.Ray]): 
-        pass
+    def Draw(self): 
+        for w in self.Walls : 
+            w.draw(self.canvas) 
+        pygame.display.flip()
+
+    def Save(self): 
+        pickle_out = open("save.pickle", "wb") 
+        pickle.dump(self, pickle_out) 
+        pickle_out.close() 
+
+        
 
     
 

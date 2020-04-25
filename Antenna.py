@@ -17,6 +17,7 @@ class Antenna :
         self.gains = Gains 
         self.Source = ImagedSource
         self.Wall = SymmetryWall
+        self.rays = [] 
 
     def CreateImage(self, symWall : "Wall.wall") -> "Antenna" : 
         
