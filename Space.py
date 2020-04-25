@@ -2,6 +2,7 @@ import Ray
 import Antenna 
 import Wall
 from typing import List
+import pygame 
 
 class Space : 
     def __init__(self, Walls : List[Wall.wall], Tx : List[Antenna.Antenna], Rx : List[Antenna.Antenna]) : 
