@@ -30,17 +30,16 @@ class Space :
 
     def Predict(self, Reflexions) : 
         transmitters = self.Tx
-        trajectories = [] 
         for _ in range(Reflexions) : 
             print("\n\nlevel of relfection : " + str(_) + "\n################\n")
             for t in transmitters : 
                 for r in self.Rx : 
                     ray = t.Propagate(r._pos, self.Walls)
                     if ray != None : 
-                        trajectories.append(ray) 
+                        r.rays.append(ray)
             transmitters = self.CreateImagesFor_AllTx_AllWalls(transmitters)
 
-        return trajectories
+       
 
     def Draw(self, Trajectories : List[Ray.Ray]): 
         pass

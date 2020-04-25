@@ -35,10 +35,10 @@ class Line :
                 if IsFirstLamda : 
                     lamda = round(P[i] / self.Direction[i], 6) 
                     IsFirstLamda = False
-                    print("the first lambda : " + str(lamda))
+                    if np.abs(lamda) > self.Distance : 
+                        return False
                 else : 
                     tmp = round(P[i] / self.Direction[i], 6) 
-                    print("other lambda : " + str(tmp))
                     if lamda != tmp : 
                         return False 
         

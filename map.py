@@ -1,8 +1,8 @@
 import pygame, sys, math
 import numpy as np
 import Cam
-def rotate2d(pos,rad) : x, y=pos; s,c = math.sin(rad),math.cos(rad); return x*c-y*s,y*c+x*s
 
+def rotate2d(pos,rad) : x, y=pos; s,c = math.sin(rad),math.cos(rad); return x*c-y*s,y*c+x*s
 
 class map : 
     def drawing(self,listeRayon, Tx, Rx, Walls):
@@ -91,17 +91,7 @@ class map :
                     x,y = -x*f,y*f
                     points += [(cx+int(x), cy+int(y))]
                 pygame.draw.line(screen, (255,0,255), points[0], points[1], 1)
-                
-                
-           
-            
-           
-            
-            
-                
-            
-           
-            
+
             pygame.display.flip()
             key = pygame.key.get_pressed()
             cam.update(dt, key)
