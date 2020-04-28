@@ -76,4 +76,8 @@ class Antenna :
                 print("No Reflexion hit !!") 
                 return None
 
+    def getPower(self):        
+        powers = [ray.allPowers() for ray in self.rays]
+        powerTot = np.sum(powers)
 
+        return powerTot
