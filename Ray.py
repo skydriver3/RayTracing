@@ -52,12 +52,8 @@ class Ray :
         """
         Returns the complex electric field for a direct path d
         """
-        #d = self.Distance
-        #trajectories = Space.Predict(Reflexions) #Reflexions?
-        #trajectory = trajectories[0]
-        #ray = trajectory[0]
         d = self.DistanceTraveled 
-        elecFieldDirect = np.sqrt(60*(self*Gtx)*Ptx) * np.exp(-1j*BETA*d) / d #(8.77)
+        elecFieldDirect = np.sqrt(60*Gtx*Ptx) * np.exp(-1j*BETA*d) / d #(8.77)
 
         return elecFieldDirect
 
@@ -73,10 +69,7 @@ class Ray :
         """
         Returns the power received by Rx (all types included: direct, transmissions, reflections)
         """
-        coeff = 1  
-        for i in range(len(self.Coefficients)): 
-            coeff = coeff * self.Coefficients[i]
-            
+        coeff = np.prod(self.Coefficients) #multiplie tous les coeff entre eux
         eField = coeff * self.elecFieldDirect(Gtx, Ptx, BETA)
         power = self.averagePower(eField)
 
