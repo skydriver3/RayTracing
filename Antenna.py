@@ -79,5 +79,6 @@ class Antenna :
     def getPower(self):        
         powers = [ray.allPowers() for ray in self.rays]
         powerTot = np.sum(powers)
-
+        #transforme en dBm
+        powerTot = 10*np.log10(powerTot / 0.001)
         return powerTot
