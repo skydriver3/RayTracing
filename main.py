@@ -11,44 +11,61 @@ import Wall
 import Space 
 import Ray
 import numpy as np
+import random
 import map
-import Line
-
 if __name__ == "__main__" : 
     
     Walls = [  
-        Wall.wall(20, 1, 1, 1, np.array([200, 0]), np.array([0, 0])), 
-        Wall.wall(20, 1, 1, 1, np.array([0, 0]), np.array([0, 100])),
-        Wall.wall(20, 1, 1, 1, np.array([200, 0]), np.array([200, 100])),
-        Wall.wall(20, 1, 1, 1, np.array([200, 100]), np.array([0, 100])),
-        Wall.wall(20, 1, 1, 1, np.array([85, 50]), np.array([50, 15])),
-        Wall.wall(20, 1, 1, 1, np.array([50, 85]), np.array([15, 50]))]
+        Wall.wall(20, 1, 1, 1, np.array([30, 0]), np.array([0, 0])), 
+        Wall.wall(20, 1, 1, 1, np.array([0, 0]), np.array([0, 15])),
+        Wall.wall(20, 1, 1, 1, np.array([30, 0]), np.array([30, 15])),
+        Wall.wall(20, 1, 1, 1, np.array([30, 15]), np.array([0, 15]))]
+        ##Wall.wall(20, 1, 1, 1, np.array([50, 85]), np.array([15, 50]))]
         
-    Tx = [Antenna.Antenna(np.array([30, 30]), 100, [])] 
-    Rx = [Antenna.Antenna(np.array([133, 80]), 0, [])] 
-
+    Tx = [(Antenna.Antenna(np.array([10, 6]), 100, [])),(Antenna.Antenna(np.array([6, 6]), 100, []))] 
+    Rx = []
+    x= 0
+    for i in range(300):
+        for j in range(150):
+           x= random.randint(1,11)
+           rx =  (Antenna.Antenna(np.array([0.05+i/10,0.05+j/10]), 0, []))
+           Rx.append(rx)
+           rx= 0
+    ##Rx = [(Antenna.Antenna(np.array([0.5, 0.5]), 2, [])),(Antenna.Antenna(np.array([16, 13]), 7, []))] 
+    
     env = Space.Space(Walls, Tx, Rx)
-    env.Predict(3)
-
+    rays = env.Predict(2)
     Rayon = []
     listeRayon = []
-    for ray in Rx[0].rays : 
+    for ray in (rays) : 
          
          Rayon = ray.Coordinates
          listeRayon+=(Rayon)
          Rayon = []
+         
     wall = []
     listWall = []
     for mur in (Walls):
         wall = [mur.Vec1, mur.Vec2]
         listWall += [wall]
         wall = []
-         
+        
+    
+    
     map = map.map()
-    Tx = [Tx[0]._pos]
-    Rx = [Rx[0]._pos]
+    txs = []
+    listeTx = []
+    for tx in (Tx):
+        txs = tx._pos
+        listeTx += [txs]
+        txs = []
+    txs = []
+    listeRx = []
+    for rx in (Rx):
+        rxs = [rx._pos, rx.getPower()]
+        listeRx += [rxs]
+        rxs = []
     
     
-    map.drawing(listeRayon, Tx, Rx, listWall)
-
-
+    print(listeRx[2])
+    map.drawing(listeRayon, listeTx, listeRx, listWall)
