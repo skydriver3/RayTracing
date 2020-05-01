@@ -46,19 +46,9 @@ class map :
                 if event.type == pygame.QUIT : pygame.quit();  sys.exit()
                 
                 #cam.events(event)
-            screen.fill((000,000,000))
+            screen.fill((000,00,000))
             
-            for i in range(len(rectangle1)) :
-                points  = []
-                x, y, = rectangle1[i][0], rectangle1[i][1]
-                z=0
-                x-=cam.pos[0]
-                y-=cam.pos[1]
-                z-=cam.pos[2]
-                f= 20/z
-                x,y = x*f,y*f
-                points += [(cx+int(x), cy+int(y))]
-                pygame.draw.rect(screen,(255,0,0), (cx+int(x), cy+int(y), f*1, f*1))
+            
                 
             for i in range(len(Rx)) :
                 points  = []
@@ -70,31 +60,30 @@ class map :
                 z-=cam.pos[2]
                 f= 20/z
                 x,y = x*f,y*f
-                if (- 50 <= u == -47):
-                    pygame.draw.rect(screen,bleu, (cx+int(x)-1, cy+int(y)-1, f*0.1, f*0.1))
-                elif (u < -50):
-                    pygame.draw.rect(screen,cyan, (cx+int(x)-1, cy+int(y)-1, f*0.1, f*0.1))
+                
+                if (u < -50):
+                    pygame.draw.rect(screen,cyan, (cx+int(x)-1, cy+int(y)-1, f*0.15, f*0.075))
                 elif (- 50 <= u < -47):
-                    pygame.draw.rect(screen,vert_pale, (cx+int(x)-1, cy+int(y)-1, f*0.1, f*0.1))
+                    pygame.draw.rect(screen,vert_pale, (cx+int(x)-1, cy+int(y)-1, f*0.15, f*0.075))
                 elif (- 47 <= u < -44):
-                    pygame.draw.rect(screen,vert, (cx+int(x)-1, cy+int(y)-1, f*0.1, f*0.1))
+                    pygame.draw.rect(screen,vert, (cx+int(x)-1, cy+int(y)-1, f*0.15, f*0.075))
                 elif (- 44 <= u < -41):
-                    pygame.draw.rect(screen,jaune, (cx+int(x)-1, cy+int(y)-1, f*0.1, f*0.1))
+                    pygame.draw.rect(screen,jaune, (cx+int(x)-1, cy+int(y)-1, f*0.15, f*0.075))
                 elif (- 41 <= u < -38):
-                    pygame.draw.rect(screen,orange, (cx+int(x)-1, cy+int(y)-1, f*0.1, f*0.1))
+                    pygame.draw.rect(screen,orange, (cx+int(x)-1, cy+int(y)-1, f*0.15, f*0.075))
                     
                 elif (- 38 <= u < -35):
-                   pygame.draw.rect(screen,rouge, (cx+int(x)-1, cy+int(y)-1, f*0.1, f*0.1))
+                   pygame.draw.rect(screen,rouge, (cx+int(x)-1, cy+int(y)-1, f*0.15, f*0.075))
                 elif (- 35 <= u < -32):
-                   pygame.draw.rect(screen,rouge_fonce, (cx+int(x)-1, cy+int(y)-1,f*0.1, f*0.1))
-                elif (- 29 <= u < -26):
-                   pygame.draw.rect(screen,rouge_fonce_1, (cx+int(x)-1, cy+int(y)-1, f*0.1, f*0.1))
+                   pygame.draw.rect(screen,rouge_fonce, (cx+int(x)-1, cy+int(y)-1,f*0.15, f*0.075))
+                elif (- 32 <= u < -26):
+                   pygame.draw.rect(screen,rouge_fonce_1, (cx+int(x)-1, cy+int(y)-1, f*0.15, f*0.075))
                 elif (- 26 <= u < -24):
-                   pygame.draw.rect(screen,rouge_fonce_2, (cx+int(x)-1, cy+int(y)-1, f*0.1, f*0.1))
+                   pygame.draw.rect(screen,rouge_fonce_2, (cx+int(x)-1, cy+int(y)-1, f*0.15, f*0.075))
                 elif (-24 < u):
-                   pygame.draw.rect(screen,rouge_fonce_3, (cx+int(x)-1, cy+int(y)-1, f*0.1, f*0.1))
+                   pygame.draw.rect(screen,rouge_fonce_3, (cx+int(x)-1, cy+int(y)-1, f*0.15, f*0.075))
                
-                ##pygame.draw.circle(screen, (255,255,255), (cx+int(x), cy+int(y)), 2)
+                ##pygame.draw.circle(screen, (255,255,255), (cx+int(x), cy+int(y)), 1)
               
             for i in range(len(Tx)) :
                 points  = []
