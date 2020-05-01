@@ -19,22 +19,33 @@ if __name__ == "__main__" :
         Wall.wall(20, 1, 1, 1, np.array([30, 0]), np.array([0, 0])), 
         Wall.wall(20, 1, 1, 1, np.array([0, 0]), np.array([0, 15])),
         Wall.wall(20, 1, 1, 1, np.array([30, 0]), np.array([30, 15])),
-        Wall.wall(20, 1, 1, 1, np.array([30, 15]), np.array([0, 15]))]
+        Wall.wall(20, 1, 1, 1, np.array([30, 15]), np.array([0, 15])),
+        Wall.wall(0.05, 1, 1, 1, np.array([10, 0]), np.array([10, 6])),
+        Wall.wall(0.05, 1, 1, 1, np.array([10, 3]), np.array([13, 3])),
+        Wall.wall(0.05, 1, 1, 1, np.array([0, 6]), np.array([4, 6])),
+        Wall.wall(0.05, 1, 1, 1, np.array([7, 6]), np.array([13, 6])),
+        Wall.wall(0.05, 1, 1, 1, np.array([16, 6]), np.array([22, 6])),
+        Wall.wall(0.05, 1, 1, 1, np.array([24, 6]), np.array([30, 6])),
+        Wall.wall(0.05, 1, 1, 1, np.array([21, 0]), np.array([21, 11])),
+        Wall.wall(0.05, 1, 1, 1, np.array([21, 13]), np.array([21, 15]))]
+        
         ##Wall.wall(20, 1, 1, 1, np.array([50, 85]), np.array([15, 50]))]
         
-    Tx = [(Antenna.Antenna(np.array([10, 6]), 100, [])),(Antenna.Antenna(np.array([6, 6]), 100, []))] 
+    Tx = [(Antenna.Antenna(np.array([1, 8]), 100, []))]##,(Antenna.Antenna(np.array([6, 6]), 100, []))] 
     Rx = []
     x= 0
     for i in range(300):
-        for j in range(150):
+       for j in range(150):
            x= random.randint(1,11)
-           rx =  (Antenna.Antenna(np.array([0.05+i/10,0.05+j/10]), 0, []))
+           rx =  (Antenna.Antenna(np.array([0.05+i/10,0.025+j/20]), 0, []))
            Rx.append(rx)
            rx= 0
-    ##Rx = [(Antenna.Antenna(np.array([0.5, 0.5]), 2, [])),(Antenna.Antenna(np.array([16, 13]), 7, []))] 
+    ##Rx = [(Antenna.Antenna(np.array([0.5, 0.5]), 0, [])),(Antenna.Antenna(np.array([16, 13]), 0, []))] 
     
     env = Space.Space(Walls, Tx, Rx)
-    rays = env.Predict(2)
+    rays = env.Predict(1)
+    #env.save();
+    #env = pickle.load(open("save.pickle", "rb"))
     Rayon = []
     listeRayon = []
     for ray in (rays) : 
@@ -62,10 +73,14 @@ if __name__ == "__main__" :
     txs = []
     listeRx = []
     for rx in (Rx):
-        rxs = [rx._pos, rx.getPower()]
+        try :
+            power = rx.getPower()
+            print((power), "power")
+        except :
+            print("\n\n\n###############\n\n\n")
+        rxs = [rx._pos, power]
         listeRx += [rxs]
         rxs = []
     
     
-    print(listeRx[2])
     map.drawing(listeRayon, listeTx, listeRx, listWall)
