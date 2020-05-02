@@ -55,7 +55,9 @@ class Line :
         #     else : 
         #         return False
 
-
+    
+    def draw(self, screen, funcDistortion, color): 
+        pygame.draw.line(screen, color, funcDistortion(self.Vec1), funcDistortion(self.Vec2), 4)
     
     def Intersect(self, OtherLine : "Line") : 
         # x = ( self.Y0 - OtherLine.Y0 ) / ( OtherLine.slope - self.slope )

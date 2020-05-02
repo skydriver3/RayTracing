@@ -3,12 +3,16 @@ import Wall
 import Ray
 import Line
 from typing import Callable, Any, List
+import colorsys
+import pygame
 
 def rotate_decorator(gain, wallAngle): 
     def rotated_gain(theta, phi) : 
         return gain( - theta + (2 * wallAngle), -phi + ( 2 * wallAngle))
     return rotated_gain
 
+def hsv2rgb(h,s,v):
+    return tuple(round(i * 255) for i in colorsys.hsv_to_rgb(h,s,v))
 
 class Antenna : 
     def __init__(self, PosVec, EmittedPower, Gains, ImagedSource : "Antenna" = None, SymmetryWall : "Wall.wall" = None): 
@@ -82,3 +86,23 @@ class Antenna :
         #transforme en dBm
         powerTot = 10*np.log10(powerTot / 0.001)
         return powerTot
+    
+    def MapPowerToColor(self, Power) : 
+        if (Power > -51):
+            Power = -51
+        if (Power < -81):
+            Power = -81
+        
+        coef = Power/90 + 51/90
+        couleur = hsv2rgb(-coef,1,1)
+        return couleur
+
+
+    def draw(self, screen, funcDistortion, CenterCoor = [], f = 1): 
+        if(len(self.rays) == 0 ) : 
+            pygame.draw.circle(screen, (0,255,0), funcDistortion(self._pos), 5)
+        
+        else : 
+            x, y = funcDistortion(self._pos)
+            pygame.draw.rect(screen,self.MapPowerToColor(self.getPower()), (CenterCoor[0]+int(x)-1, CenterCoor[1]+int(y)-1, f*0.5, f*0.5))
+
