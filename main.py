@@ -13,7 +13,6 @@ if __name__ == "__main__" :
     
     pygame.init()
     screen  = pygame.display.set_mode((600,600))
-    screen.fill((255,255,255))
     Clock = pygame.time.Clock()
     
     
@@ -42,11 +41,9 @@ if __name__ == "__main__" :
     
     env = Space.Space(Walls, Tx, Rx)
     env.Predict(4)
+    print("Finished Predict")
     env.Draw(screen, Clock)
-    pygame.display.flip()
 
-    while True : 
-        pass
     #env.save();
     #env = pickle.load(open("save.pickle", "rb"))
     

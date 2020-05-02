@@ -5,6 +5,7 @@ from typing import List
 import multiprocessing as mp 
 from functools import partial
 import Cam
+import pygame
 
 def _predictLayerDecorator(space, t, trajectories): 
     def inner(r): 
@@ -50,13 +51,14 @@ class Space :
         transmitters = self.Tx
         trajectories = [] 
         for _ in range(Reflexions) :
-            for t in transmitters : 
-                #print(t) 
-                with mp.Pool(3) as p : 
+            with mp.Pool(3) as p : 
+                for t in transmitters : 
+                    #print(t) 
+                    #with mp.Pool(3) as p : 
                     f = partial(_predictLayer , t=t, walls = self.Walls)
                     self.Rx = p.map(f, self.Rx)
 
-            with mp.Pool(3) as p : 
+                #with mp.Pool(3) as p : 
                 f = partial(self.CreateImageFor_AllWalls)
                 temp = p.map(f, transmitters)
                 transmitters = [] 
@@ -80,15 +82,33 @@ class Space :
        
 
     def Draw(self, screen, Clock): 
-        
-        for w in self.Walls : 
-            w.draw(screen, self.Distortion, (255,0,250))
-        
-        for r in self.Rx : 
-            r.draw(screen, self.Distortion, [self.cx, self.cy], 20/(-self.cam.pos[2]))
-        
-        for t in self.Tx : 
-            t.draw(screen, self.Distortion)
+
+        radian = 0
+                
+        while True : 
+            dt = Clock.tick()/6000
+            radian+=dt
+            for event  in pygame.event.get() : 
+                if event.type == pygame.QUIT : pygame.quit();  sys.exit()
+                
+                #cam.events(event)
+            screen.fill((255,255,255))
+
+            # print("Drawing walls")
+            for w in self.Walls : 
+                w.draw(screen, self.Distortion, (255,0,250))
+            
+            # print("Drawing Rx")
+            for r in self.Rx : 
+                r.draw(screen, self.Distortion, [self.cx, self.cy], 20/(-self.cam.pos[2]))
+            
+            # print("Drawing Tx")
+            for t in self.Tx : 
+                t.draw(screen, self.Distortion)
+
+            pygame.display.flip()
+            key = pygame.key.get_pressed()
+            self.cam.update(dt, key)
 
             
 
