@@ -1,4 +1,5 @@
 import numpy as np 
+import pygame 
 
 class Line : 
     def __init__(self, StartVec, EndVec) : 
@@ -72,7 +73,7 @@ class Line :
         else : 
             return (False, None)
 
-        print(f"Printing intersection point : {P} ")
+        #print(f"Printing intersection point : {P} ")
         if self.Contains(P) and OtherLine.Contains(P) : 
             return (True, P)  
         else : 

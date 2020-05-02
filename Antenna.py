@@ -42,8 +42,8 @@ class Antenna :
 
     def Propagate(self, Rx_pos, Walls: List["Wall.wall"], ray : "Ray.Ray"  = None ): 
         
-        print("Called Propagate : the propagation wall is " + repr(self.Wall))
-        print(f"the image position : {self._pos}")
+        #print("Called Propagate : the propagation wall is " + repr(self.Wall))
+        #print(f"the image position : {self._pos}")
         gains = [] 
         line = Line.Line(Rx_pos, self._pos)
         P = self._pos
@@ -52,13 +52,13 @@ class Antenna :
             # print("going through walls")
             IsIntersected, intersectionPoint = line.Intersect(w) 
             if IsIntersected: 
-                print("Intersection")
+                #print("Intersection")
                 theta = line.Angle(w)
                 if (w == self.Wall) : 
                     gains.append(w.ReflectionCoeffWall(theta)) 
                     IsReflexionWallHit = True
                     P = intersectionPoint
-                    print("Hit the reflective wall !!!")
+                    #print("Hit the reflective wall !!!")
                 else : 
                     gains.append(w.TransmissionCoeffWall(theta))
         
@@ -77,7 +77,7 @@ class Antenna :
             if (self.Source == None): # si c'est une source initial c'est normale qu'il n'ai pas reflection
                 return ray 
             else :
-                print("No Reflexion hit !!") 
+                #print("No Reflexion hit !!") 
                 return None
 
     def getPower(self):        
@@ -88,12 +88,12 @@ class Antenna :
         return powerTot
     
     def MapPowerToColor(self, Power) : 
-        if (Power > -51):
-            Power = -51
-        if (Power < -81):
-            Power = -81
+        if (Power > -22):
+            Power = -22
+        if (Power < -150):
+            Power = -150
         
-        coef = Power/90 + 51/90
+        coef = Power/90 + 22/90
         couleur = hsv2rgb(-coef,1,1)
         return couleur
 
@@ -106,3 +106,5 @@ class Antenna :
             x, y = funcDistortion(self._pos)
             pygame.draw.rect(screen,self.MapPowerToColor(self.getPower()), (CenterCoor[0]+int(x)-1, CenterCoor[1]+int(y)-1, f*0.5, f*0.5))
 
+    def __repr__(self):
+        return "I'm an Antenna"
