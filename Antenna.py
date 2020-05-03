@@ -53,7 +53,7 @@ class Antenna :
             IsIntersected, intersectionPoint = line.Intersect(w) 
             if IsIntersected: 
                 #print("Intersection")
-                theta = line.Angle(w)
+                theta = line.incidenceAngle(w)
                 if (w == self.Wall) : 
                     gains.append(w.ReflectionCoeffWall(theta)) 
                     IsReflexionWallHit = True
