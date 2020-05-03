@@ -46,10 +46,19 @@ class Space :
         
         return Images
 
+    def Predict(self, Reflexions):
+        transmitters = self.Tx 
+        for _ in range(Reflexions) : 
+            for t in transmitters : 
+                for r in self.Rx : 
+                    ray = t.Propagate(r._pos, self.Walls)
+                    if ray != None : 
+                        r.rays.append(ray)
+                
+                transmitters = self.CreateImagesFor_AllTx_AllWalls(transmitters)
 
-    def Predict(self, Reflexions) : 
+    def Predict_MultiProcessing(self, Reflexions) : 
         transmitters = self.Tx
-        trajectories = [] 
         for _ in range(Reflexions) :
             with mp.Pool(3) as p : 
                 for t in transmitters : 
