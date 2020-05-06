@@ -28,18 +28,18 @@ if __name__ == "__main__" :
     start = time.time()
     
     Walls = [  
-        Wall.wall(0.3, 5, 1, 0.014, np.array([30, 0]), np.array([0, 0])),
-        Wall.wall(0.3, 5, 1, 0.014, np.array([0, 0]), np.array([0, 15])),
-        Wall.wall(0.3, 5, 1, 0.014, np.array([30, 0]), np.array([30, 15])),
-        Wall.wall(0.3, 5, 1, 0.014, np.array([30, 15]), np.array([0, 15])),
-        Wall.wall(0.15, 5, 1, 0.014, np.array([10, 0]), np.array([10, 6])),
-        Wall.wall(0.15, 5, 1, 0.014, np.array([10, 3]), np.array([13, 3])),
-        Wall.wall(0.15, 5, 1, 0.014, np.array([0, 6]), np.array([4, 6])),
-        Wall.wall(0.15, 5, 1, 0.014, np.array([7, 6]), np.array([13, 6])),
-        Wall.wall(0.15, 5, 1, 0.014, np.array([16, 6]), np.array([22, 6])),
-        Wall.wall(0.15, 5, 1, 0.014, np.array([24, 6]), np.array([30, 6])),
-        Wall.wall(0.15, 5, 1, 0.014, np.array([21, 0]), np.array([21, 11])),
-        Wall.wall(0.15, 5, 1, 0.014, np.array([21, 13]), np.array([21, 15]))]
+        Wall.wall(0.3, 5, 0.014, np.array([30, 0]), np.array([0, 0])),
+        Wall.wall(0.3, 5, 0.014, np.array([0, 0]), np.array([0, 15])),
+        Wall.wall(0.3, 5, 0.014, np.array([30, 0]), np.array([30, 15])),
+        Wall.wall(0.3, 5, 0.014, np.array([30, 15]), np.array([0, 15])),
+        Wall.wall(0.15, 5, 0.014, np.array([10, 0]), np.array([10, 6])),
+        Wall.wall(0.15, 5, 0.014, np.array([10, 3]), np.array([13, 3])),
+        Wall.wall(0.15, 5, 0.014, np.array([0, 6]), np.array([4, 6])),
+        Wall.wall(0.15, 5, 0.014, np.array([7, 6]), np.array([13, 6])),
+        Wall.wall(0.15, 5, 0.014, np.array([16, 6]), np.array([22, 6])),
+        Wall.wall(0.15, 5, 0.014, np.array([24, 6]), np.array([30, 6])),
+        Wall.wall(0.15, 5, 0.014, np.array([21, 0]), np.array([21, 11])),
+        Wall.wall(0.15, 5, 0.014, np.array([21, 13]), np.array([21, 15]))]
         
     Tx = [(Antenna.Antenna(np.array([12,14]), 0.1, []))]##,(Antenna.Antenna(np.array([6, 6]), 100, []))] 
     
@@ -63,7 +63,7 @@ if __name__ == "__main__" :
     #Rx = [(Antenna.Antenna(np.array([25, 5]), 0, []))] 
     
     env = Space.Space(Walls, Tx, Rx)
-    env.Predict_MultiProcessing(4)
+    env.Predict_MultiProcessing(1)
     end = time.time()
     print(f"Finished Predict, Total time of the run : {int((end - start) / 60)}:{(end-start)%60}")
     

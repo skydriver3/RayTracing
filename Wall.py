@@ -8,10 +8,9 @@ FREQ = 5e9
 BETA = 2*np.pi*FREQ / c
 
 class wall (Line.Line): 
-    def __init__(self, Width, epsilon, mu, sigma, StartVec, EndVec): 
+    def __init__(self, Width, epsilon, sigma, StartVec, EndVec): 
         self._width = Width #notee l dans le sylla
         self._eps = epsilon #s'assurer qu'on entre bien epsr*eps0 alors 
-        self._mu = mu 
         self._sigma = sigma
         super(wall, self).__init__(StartVec, EndVec)
 
