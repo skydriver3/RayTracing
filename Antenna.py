@@ -87,24 +87,44 @@ class Antenna :
         powerTot = 10*np.log10(powerTot / 0.001)
         return powerTot
     
+
     def MapPowerToColor(self, Power) : 
         if (Power > -22):
             Power = -22
-        if (Power < -150):
-            Power = -150
+        if (Power < -82): #dBm
+            Power = -82
         
-        coef = Power/90 + 22/90
+        #coef = 2*Power/(3*60) + 2*20/(3*60)
+        coef = Power/(90) + 22/(90)
+
         couleur = hsv2rgb(-coef,1,1)
+
         return couleur
 
-
     def draw(self, screen, funcDistortion, CenterCoor = [], f = 1): 
+
         if(len(self.rays) == 0 ) : 
-            pygame.draw.circle(screen, (0,255,0), funcDistortion(self._pos), 5)
+            pygame.draw.circle(screen, (0,0,255), funcDistortion(self._pos), 1)
         
         else : 
             x, y = funcDistortion(self._pos)
             pygame.draw.rect(screen,self.MapPowerToColor(self.getPower()), (CenterCoor[0]+int(x)-1, CenterCoor[1]+int(y)-1, f*0.5, f*0.5))
+            #pygame.draw.rect(screen,self.MapPowerToColor(self.getPower()), (CenterCoor[0]+int(x)-1, CenterCoor[1]+int(y)-1, f*2, f*0.25))
+            
+            pygame.draw.line(screen, (255,0,0), (self.rays[0].Coordinates[0][0]+int(x)-1) , (self.rays[0].Coordinates[0][1]+int(y)-1), 2)
+            #print("COORD X = ", self.rays[0].Coordinates[0][0], "COORD Y = ", self.rays[0].Coordinates[0][1])
+            #print("COEFF ray =", self.rays[0].Coefficients)
+            #print("LEN self.rays =", len(self.rays))
+
+            #print("GET POWER = ", self.getPower())
+            
+            # u = self.getPower()            
+            # if (u == -22 or u == -27 or u == -32 or u == -37 or u == -42 or u == -47 or u == -52 or u == -57 or u == -62 or u == -67 or u == -72 or u == -77 or u == -82 ) :
+            #     variable = u
+            #     pygame.draw.line(screen, (0,0,0),(CenterCoor[0]+int(x)-1+1.7*f, CenterCoor[1]+int(y)-1), (CenterCoor[0]+int(x)-1+2*f, CenterCoor[1]+int(y)-1), 1)
+            #     font = pygame.font.SysFont("police/freestylescript.ttf", 15, False, True)
+            #     afficher = font.render(str(variable), 1, (0, 0, 0))
+            #     screen.blit(afficher, (CenterCoor[0]+int(x)-1+(2.2*f), CenterCoor[1]+int(y)))
 
     def __repr__(self):
         return "I'm an Antenna"

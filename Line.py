@@ -37,13 +37,16 @@ class Line :
                     return False  
             else : 
                 if IsFirstLamda : 
-                    lamda = round(P[i] / self.Direction[i], 6) 
+                    # lamda = round(P[i] / self.Direction[i], 6) 
+                    lamda = round(P[i] / self.Direction[i], 4) 
                     IsFirstLamda = False
                     
                     if np.abs(lamda) > self.Distance / 2 : 
                         return False
                 else : 
-                    tmp = round(P[i] / self.Direction[i], 6) 
+#                    tmp = round(P[i] / self.Direction[i], 6) 
+
+                    tmp = round(P[i] / self.Direction[i], 4) 
                     if lamda != tmp : 
                         return False 
         
@@ -58,7 +61,7 @@ class Line :
 
     
     def draw(self, screen, funcDistortion, color): 
-        pygame.draw.line(screen, color, funcDistortion(self.Vec1), funcDistortion(self.Vec2), 4)
+        pygame.draw.line(screen, color, funcDistortion(self.Vec1), funcDistortion(self.Vec2), 1)
     
     def Intersect(self, OtherLine : "Line") : 
         # x = ( self.Y0 - OtherLine.Y0 ) / ( OtherLine.slope - self.slope )
@@ -66,7 +69,7 @@ class Line :
         P= []
  
         num = (OtherLine.Direction[1] * (self.Vec1[0] - OtherLine.Vec1[0])) - (OtherLine.Direction[0] * (self.Vec1[1] - OtherLine.Vec1[1]))
-        denom = self.Direction[1] * OtherLine.Direction[0] - self.Direction[0] * OtherLine.Direction[1]
+        denom = (self.Direction[1] * OtherLine.Direction[0]) - (self.Direction[0] * OtherLine.Direction[1])
         if(denom != 0 ):
             lamda = num / denom 
             P = self.Vec1 + self.Direction * lamda
