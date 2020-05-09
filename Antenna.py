@@ -52,7 +52,6 @@ class Antenna :
             # print("going through walls")
             IsIntersected, intersectionPoint = line.Intersect(w) 
             if IsIntersected: 
-                #print("Intersection")
                 theta = line.Angle(w)
                 if (w == self.Wall) : 
                     gains.append(w.ReflectionCoeffWall(theta)) 
@@ -90,10 +89,12 @@ class Antenna :
     def MapPowerToColor(self, Power) : 
         if (Power > -22):
             Power = -22
-        if (Power < -150):
-            Power = -150
+        if (Power < -82): #dBm
+            Power = -82
         
-        coef = Power/90 + 22/90
+        #coef = 2*Power/(3*60) + 2*20/(3*60)
+        coef = Power/(90) + 22/(90)
+
         couleur = hsv2rgb(-coef,1,1)
         return couleur
 

@@ -2,6 +2,7 @@ import numpy as np
 import Line
 from typing import List
 from scipy.constants import c
+import pygame
 
 #everything below to remove and place it in the antenna
 Gtx = 4*np.pi*0.13 
@@ -38,9 +39,9 @@ class Ray :
         self.Coordinates.append([beam.Vec1, beam.Vec2])
         self.Coefficients.extend(beam.gains)
     
-    def draw(self, canvas) : 
+    def draw(self, canvas, dis) : 
         for coor in self.Coordinates : 
-            pygame.draw.line(canvas, (255, 0, 0), coor[0], coor[1])
+            pygame.draw.line(canvas, (255, 0, 0), dis(coor[0]), dis(coor[1]))
 
     def __repr__(self):
         return "Im a ray, yay !!!"
@@ -74,3 +75,5 @@ class Ray :
         power = self.averagePower(eField)
 
         return power
+
+ 

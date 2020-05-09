@@ -33,20 +33,18 @@ class Line :
         P = (Point - self.MidPoint()) 
         for i in range(len(P)) : 
             if self.Direction[i] == 0: 
-                if(P[i] != 0): 
+                if(P[i] > 1e-8 or P[i] < -1e-8): 
                     return False  
             else : 
                 if IsFirstLamda : 
                     lamda = round(P[i] / self.Direction[i], 6) 
                     IsFirstLamda = False
-                    
                     if np.abs(lamda) > self.Distance / 2 : 
                         return False
                 else : 
                     tmp = round(P[i] / self.Direction[i], 6) 
                     if lamda != tmp : 
                         return False 
-        
         return True 
 
                 

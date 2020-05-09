@@ -90,7 +90,7 @@ class Space :
   
        
 
-    def Draw(self, screen, Clock): 
+    def Draw(self, screen, Clock, DrawRays = False): 
 
         radian = 0
                 
@@ -110,6 +110,9 @@ class Space :
             # print("Drawing Rx")
             for r in self.Rx : 
                 r.draw(screen, self.Distortion, [self.cx, self.cy], 20/(-self.cam.pos[2]))
+                if DrawRays : 
+                    for ray in r.rays : 
+                        ray.draw(screen, self.Distortion)
             
             # print("Drawing Tx")
             for t in self.Tx : 
