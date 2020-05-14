@@ -55,7 +55,7 @@ class Space :
                     if ray != None : 
                         r.rays.append(ray)
                 
-                transmitters = self.CreateImagesFor_AllTx_AllWalls(transmitters)
+            transmitters = self.CreateImagesFor_AllTx_AllWalls(transmitters)
 
     def Predict_MultiProcessing(self, Reflexions) : 
         transmitters = self.Tx
@@ -121,11 +121,3 @@ class Space :
             pygame.display.flip()
             key = pygame.key.get_pressed()
             self.cam.update(dt, key)
-
-            
-
-
-    
-
-    
-
