@@ -40,7 +40,7 @@ class Antenna :
         return Antenna(pos, None, None, self, symWall)
 
 
-    def Propagate(self, Rx_pos, Walls: List["Wall.wall"], ray : "Ray.Ray"  = None ): 
+    def Propagate(self, Rx_pos, Walls: List["Wall.wall"], ray : "Ray.Ray"  = None, previousSymWall = None ): 
         
         #print("Called Propagate : the propagation wall is " + repr(self.Wall))
         #print(f"the image position : {self._pos}")
@@ -58,7 +58,7 @@ class Antenna :
                     IsReflexionWallHit = True
                     P = intersectionPoint
                     #print("Hit the reflective wall !!!")
-                else : 
+                elif(w != previousSymWall) : 
                     gains.append(w.TransmissionCoeffWall(theta))
         
         if(ray != None ): 
@@ -69,7 +69,7 @@ class Antenna :
         
         # le rayon emis doit passer par le mur de la reflection sinon le scenario n'est pas valide 
         if(IsReflexionWallHit) : 
-            ray = self.Source.Propagate(P, Walls, ray) 
+            ray = self.Source.Propagate(P, Walls, ray, self.Wall) 
 
             return ray
         else : 
@@ -84,6 +84,7 @@ class Antenna :
         powerTot = np.sum(powers)
         #transforme en dBm
         powerTot = 10*np.log10(powerTot / 0.001)
+        #print("POWER", powerTot)
         return powerTot
     
     def MapPowerToColor(self, Power) : 
