@@ -10,7 +10,7 @@ Ptx = 0.1
 FREQ = 5e9
 BETA = 2*np.pi*(FREQ) / c #A changer, on veut GAMMAm
 H_EQ = -c / (FREQ * np.pi)
-R_A = 73.45612758
+R_A = 75.86098878
 
 class Beam(Line.Line) : #On y rajouterait pas l'antenne en parametre pour avoir Gtx et Ptx propre a l'antenne?
     def __init__(self, StartVec, EndVec, Gains : list) : 
