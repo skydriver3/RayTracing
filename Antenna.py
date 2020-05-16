@@ -40,7 +40,7 @@ class Antenna :
         return Antenna(pos, None, None, self, symWall)
 
 
-    def Propagate(self, Rx_pos, Walls: List["Wall.wall"], ray : "Ray.Ray"  = None ): 
+    def Propagate(self, Rx_pos, Walls: List["Wall.wall"], ray : "Ray.Ray"  = None, previousSymWall = None ): 
         
         #print("Called Propagate : the propagation wall is " + repr(self.Wall))
         #print(f"the image position : {self._pos}")
@@ -52,14 +52,13 @@ class Antenna :
             # print("going through walls")
             IsIntersected, intersectionPoint = line.Intersect(w) 
             if IsIntersected: 
-                #print("Intersection")
                 theta = line.incidenceAngle(w)
                 if (w == self.Wall) : 
                     gains.append(w.ReflectionCoeffWall(theta)) 
                     IsReflexionWallHit = True
                     P = intersectionPoint
                     #print("Hit the reflective wall !!!")
-                else : 
+                elif(w != previousSymWall) : 
                     gains.append(w.TransmissionCoeffWall(theta))
         
         if(ray != None ): 
@@ -70,7 +69,7 @@ class Antenna :
         
         # le rayon emis doit passer par le mur de la reflection sinon le scenario n'est pas valide 
         if(IsReflexionWallHit) : 
-            ray = self.Source.Propagate(P, Walls, ray) 
+            ray = self.Source.Propagate(P, Walls, ray, self.Wall) 
 
             return ray
         else : 
@@ -85,9 +84,30 @@ class Antenna :
         powerTot = np.sum(powers)
         #transforme en dBm
         powerTot = 10*np.log10(powerTot / 0.001)
+        #print("POWER", powerTot)
         return powerTot
     
-
+    def dBmToBinary(self):
+        powers = [ray.allPowers() for ray in self.rays]
+        powerTot = np.sum(powers)
+        powerTot = 10*np.log10(powerTot / 0.001)
+        Mbs = (379/31)*powerTot + (54+(82*379/31))
+        return Mbs
+    
+    def MapMbsToColor(self, u) :
+        rangeC = 2/3
+        b = 433
+        n = 54
+        if (u > b):
+            u = b
+        if (u < n):
+            u = n
+                
+        coef = (u*rangeC)/((b-n)) + (-b*rangeC)/((b-n))
+        couleur = hsv2rgb(-coef,1,1)
+        
+        return couleur
+    
     def MapPowerToColor(self, Power) : 
         if (Power > -22):
             Power = -22
@@ -98,33 +118,34 @@ class Antenna :
         coef = Power/(90) + 22/(90)
 
         couleur = hsv2rgb(-coef,1,1)
-
         return couleur
 
-    def draw(self, screen, funcDistortion, CenterCoor = [], f = 1): 
 
+    def draw(self, screen, funcDistortion, CenterCoor = [], f = 1): 
         if(len(self.rays) == 0 ) : 
-            pygame.draw.circle(screen, (0,0,255), funcDistortion(self._pos), 1)
+            pygame.draw.circle(screen, (0,0,0), funcDistortion(self._pos), 1)
         
         else : 
+            u, v = self._pos
             x, y = funcDistortion(self._pos)
-            pygame.draw.rect(screen,self.MapPowerToColor(self.getPower()), (CenterCoor[0]+int(x)-1, CenterCoor[1]+int(y)-1, f*0.5, f*0.5))
-            #pygame.draw.rect(screen,self.MapPowerToColor(self.getPower()), (CenterCoor[0]+int(x)-1, CenterCoor[1]+int(y)-1, f*2, f*0.25))
-            
-            pygame.draw.line(screen, (255,0,0), (self.rays[0].Coordinates[0][0]+int(x)-1) , (self.rays[0].Coordinates[0][1]+int(y)-1), 2)
-            #print("COORD X = ", self.rays[0].Coordinates[0][0], "COORD Y = ", self.rays[0].Coordinates[0][1])
-            #print("COEFF ray =", self.rays[0].Coefficients)
-            #print("LEN self.rays =", len(self.rays))
-
-            #print("GET POWER = ", self.getPower())
-            
-            # u = self.getPower()            
-            # if (u == -22 or u == -27 or u == -32 or u == -37 or u == -42 or u == -47 or u == -52 or u == -57 or u == -62 or u == -67 or u == -72 or u == -77 or u == -82 ) :
-            #     variable = u
-            #     pygame.draw.line(screen, (0,0,0),(CenterCoor[0]+int(x)-1+1.7*f, CenterCoor[1]+int(y)-1), (CenterCoor[0]+int(x)-1+2*f, CenterCoor[1]+int(y)-1), 1)
-            #     font = pygame.font.SysFont("police/freestylescript.ttf", 15, False, True)
-            #     afficher = font.render(str(variable), 1, (0, 0, 0))
-            #     screen.blit(afficher, (CenterCoor[0]+int(x)-1+(2.2*f), CenterCoor[1]+int(y)))
+            liste_power = [[-82,-82,-82,-82,-82,-82,-82,-82],[-82,-82,-82,-82,-82,-82,-82,-82],
+                           [-82,-82,-82,-82,-82,-82,-82,-82],[-82,-82,-82,-82,-82,-82,-82,-82],
+                           [-82,-82,-82,-82,-82,-82,-82,-82],[-82,-82,-82,-82,-82,-82,-82,-82],
+                           [-82,-82,-82,-82,-82,-82,-82,-82],[-72,-64,-75,-77,-79,-75,-82,-82],
+                           [-69,-60,-75,-79,-79,-78,-78,-79],[-56,-61,-79,-71,-75,-79,-78,-78],
+                           [-60,-72,-81,-75,-77,-79,-72,-79],
+                           [-23,-31,-35,-40,-42,-47, -47], [-24,-33,-37,-31,-43,-45, -45],
+                           [-25,-31,-42,-42,-47,-48, -48],[-32,-43,-42,-44,-45,-50, -50],
+                           [-43,-37,-40,-45,-46,-47, -47],[-49,-45,-48,-48,-50,-50, -50]]
+            '''
+            if (0 <= u <= 11):
+                pygame.draw.rect(screen,self.MapPowerToColor(liste_power[int(u)][int(v)]), (int(x)-1, int(y)-1, f*2, f*2))
+            else :
+                pygame.draw.rect(screen,self.MapPowerToColor(liste_power[int(u)][int(v+5)]), (int(x)-1, int(y)-1, f*2, f*2))
+            '''
+            #print("power =",self.getPower(), "Mbs =",self.dBmToBinary() )
+            #pygame.draw.rect(screen,self.MapPowerToColor(self.getPower()), (int(x)-1, int(y)-1, f*0.9, f*0.9))
+            pygame.draw.rect(screen,self.MapMbsToColor(self.dBmToBinary()), (int(x)-1, int(y)-1, f*0.9, f*0.9))
 
     def __repr__(self):
         return "I'm an Antenna"
